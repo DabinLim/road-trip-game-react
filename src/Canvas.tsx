@@ -6,6 +6,16 @@ import CAR_THREE from './images/car3-above.png';
 import CAR_FOUR from './images/car4-above.png';
 import CAR_FIVE from './images/car5-above.png';
 import CAR_SIX from './images/car6-above.png';
+import Road from './images/road.png';
+import ReactDOM from 'react-dom';
+import './canvas.css';
+
+
+// const PortalModal = props => {
+//     const modalRoot = document.querySelector('#modal-root');
+//     if (!modalRoot) return;
+//     return ReactDOM.createPortal(<></>, modalRoot)
+// }
 
 interface ItemPosition {
   x: number;
@@ -14,7 +24,7 @@ interface ItemPosition {
   h: number;
 }
 
-const W = 600;
+const W = 558;
 const H = 600;
 const VELOCITY = {
   mainCar: {
@@ -139,7 +149,7 @@ function Canvas() {
         alert(`운전자가 사망하였습니다\n점수: ${score}`)
       }
     },
-    []
+    [score]
   );
   const initialGame = useCallback((ctx: CanvasRenderingContext2D) => {
     ctx.clearRect(0, 0, W, H);
@@ -306,7 +316,7 @@ function Canvas() {
     createCar()
   },[time])
   return (
-    <>
+    <div id={'modal-root'}>
       <div style={{ margin: "10px auto", textAlign: "center" }}>
         <button type="button" onClick={() => setState("pause")}>
           PAUSE
@@ -319,6 +329,7 @@ function Canvas() {
         </button>
         <p>현재 점수: {score}</p>
       </div>
+      <div style={{position: 'relative', width: W, height: H, margin: "0 auto",}}>
       <canvas
         ref={ref}
         width={W}
@@ -329,7 +340,9 @@ function Canvas() {
           border: "solid 1px black",
         }}
       />
-    </>
+      <div className={state === 'play' ? 'road-animation' : 'road'}/>
+      </div>
+    </div>
   );
 }
 
