@@ -6,9 +6,9 @@ import CAR_THREE from './images/car3-above.png';
 import CAR_FOUR from './images/car4-above.png';
 import CAR_FIVE from './images/car5-above.png';
 import CAR_SIX from './images/car6-above.png';
-import Road from './images/road.png';
-import ReactDOM from 'react-dom';
+import CARPET_LOGO from './images/carpet-logo.png';
 import './canvas.css';
+import swal from 'sweetalert2';
 
 
 // const PortalModal = props => {
@@ -33,8 +33,12 @@ const VELOCITY = {
   },
   carAccel: 0.02
 };
-const CREATE_CAR_TIME = 500;
 const CAR_SCORE = 100;
+const LEVEL_1_CAR_CREATE = 500;
+const LEVEL_2_CAR_CREATE = 400;
+const LEVEL_3_CAR_CREATE = 300;
+const LEVEL_4_CAR_CREATE = 200;
+const LEVEL_5_CAR_CREATE = 100;
 
 interface PositionRef {
   cars: {position: ItemPosition, carIndex: number}[];
@@ -46,6 +50,8 @@ function Canvas() {
   const [state, setState] = useState<"play" | "pause" | "stop">("stop");
   const [score, setScore] = useState(0);
   const [time, setTime] = useState(0);
+  const [createCarTime, setCreateCarTime] = useState(LEVEL_1_CAR_CREATE);
+  const [bestScore, setBestScore] = useState(0);
   
   const ref = useRef<HTMLCanvasElement>(null);
   const mainCarRef = useRef<HTMLImageElement>(null);
@@ -146,7 +152,15 @@ function Canvas() {
         console.log(mainCarPosition)
         console.log(carPosition)
         setState('stop');
-        alert(`운전자가 사망하였습니다\n점수: ${score}`)
+        swal.fire(`운전자가 사망하였습니다ㅋ\n점수: ${score}`).then(() => {
+            setBestScore((n) => {
+                if (n < score) {
+                    return score
+                } else {
+                    return n
+                }
+            })
+        })
       }
     },
     [score]
@@ -233,7 +247,6 @@ function Canvas() {
       }
       if (car && car2 && car3 && car4 && car5 && car6) {
         position.cars.forEach((carPosition, index) => {
-            console.log(carPosition);
           updateCarPosition(carPosition.position, index);
           switch (carPosition.carIndex) {
             case 2:
@@ -305,18 +318,126 @@ function Canvas() {
         } else {
             return n + 1
         }
-    })}, 300);
+    })}, createCarTime);
     return () => {
         timer && window.clearInterval(timer);
         timer = undefined;
     }
-  },[])
+  },[createCarTime])
 
   useEffect(() => {
     createCar()
   },[time])
+
+  useEffect(() => {
+    if (score === 3000) {
+        setState('pause')
+        swal.fire({
+            title: '휴가 성공!',
+            text: '휴가지에 도착했어요!\n조금 더 달려볼까요?',
+            confirmButtonText: '레벨 2로 올리기',
+            denyButtonText: '싫어용',
+            showDenyButton: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setCreateCarTime(LEVEL_2_CAR_CREATE);
+                setState('play')
+            } else {
+                console.log('gggg')
+                setState('stop')
+                setCreateCarTime(LEVEL_1_CAR_CREATE);
+            }
+        })
+    }
+    if (score === 8000) {
+        setState('pause')
+        swal.fire({
+            title: '휴가 성공!',
+            text: '휴가지에 도착했어요!\n조금 더 달려볼까요?',
+            confirmButtonText: '레벨 3로 올리기',
+            denyButtonText: '싫어용',
+            showDenyButton: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setCreateCarTime(LEVEL_3_CAR_CREATE);
+                setState('play')
+            } else {
+                console.log('gggg')
+                setState('stop')
+                setCreateCarTime(LEVEL_1_CAR_CREATE);
+            }
+        })
+    }
+    if (score === 15000) {
+        setState('pause')
+        swal.fire({
+            title: '휴가 성공!',
+            text: '휴가지에 도착했어요!\n조금 더 달려볼까요?',
+            confirmButtonText: '레벨 4로 올리기',
+            denyButtonText: '싫어용',
+            showDenyButton: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setCreateCarTime(LEVEL_4_CAR_CREATE);
+                setState('play')
+            } else {
+                console.log('gggg')
+                setState('stop')
+                setCreateCarTime(LEVEL_1_CAR_CREATE);
+            }
+        })
+    }
+    if (score === 30000) {
+        setState('pause')
+        swal.fire({
+            title: '휴가 성공!',
+            text: '휴가지에 도착했어요!\n조금 더 달려볼까요?',
+            confirmButtonText: '레벨 5로 올리기',
+            denyButtonText: '싫어용',
+            showDenyButton: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setCreateCarTime(LEVEL_5_CAR_CREATE);
+                setState('play')
+            } else {
+                console.log('gggg')
+                setState('stop')
+                setCreateCarTime(LEVEL_1_CAR_CREATE);
+            }
+        })
+    }
+  },[score])
+
+
+  useEffect(() => {
+    swal.fire({
+      title: '더카펫 휴가 대작전',
+      text: '더카펫 프로젝트를 마친 슬로그업 직원들은 휴가를 가려고 합니다.\n무사히 휴가를 갈 수 있도록 운전을 도와주세요.',
+      confirmButtonText: '휴가가기',
+    }).then(() => setState('play'))
+  },[])
+
+  const getLevel = () => {
+    switch (createCarTime) {
+        case LEVEL_1_CAR_CREATE:
+            return 'level 1'
+        case LEVEL_2_CAR_CREATE:
+            return 'level 2'
+        case LEVEL_3_CAR_CREATE:
+            return 'level 3'
+        case LEVEL_4_CAR_CREATE:
+            return 'level 4'
+        case LEVEL_5_CAR_CREATE:
+            return 'level 5'
+        default:
+            return 'level 0'
+    }
+  }
   return (
     <div id={'modal-root'}>
+        <header className='carpet-logo'>
+        <img src={CARPET_LOGO} alt="카펫 로고" className='carpet-logo-image'/>
+        </header>
       <div style={{ margin: "10px auto", textAlign: "center" }}>
         <button type="button" onClick={() => setState("pause")}>
           PAUSE
@@ -328,6 +449,8 @@ function Canvas() {
           STOP
         </button>
         <p>현재 점수: {score}</p>
+        <p>최고 점수: {bestScore}</p>
+        <p>현재 레벨: {getLevel()}</p>
       </div>
       <div style={{position: 'relative', width: W, height: H, margin: "0 auto",}}>
       <canvas
