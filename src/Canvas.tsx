@@ -152,14 +152,15 @@ function Canvas() {
         console.log(mainCarPosition)
         console.log(carPosition)
         setState('stop');
+        setCreateCarTime(LEVEL_1_CAR_CREATE);
+        setBestScore((n) => {
+            if (n < score) {
+                return score
+            } else {
+                return n
+            }
+        })
         swal.fire(`운전자가 사망하였습니다ㅋ\n점수: ${score}`).then(() => {
-            setBestScore((n) => {
-                if (n < score) {
-                    return score
-                } else {
-                    return n
-                }
-            })
         })
       }
     },
