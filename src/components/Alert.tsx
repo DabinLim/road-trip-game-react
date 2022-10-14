@@ -3,32 +3,31 @@ import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
 interface Props {
-    title?: string;
-    body: ReactNode;
-    onConfirm?: () => void;
-    onConfirmText?: string; 
+  title?: string;
+  body: ReactNode;
+  onConfirm?: () => void;
+  onConfirmText?: string;
 }
 
 export default function Alert({
-    title,
-    body,
-    onConfirm,
-    onConfirmText,
+  title,
+  body,
+  onConfirm,
+  onConfirmText,
 }: PropsWithChildren<Props>) {
-    const modalRoot = document.querySelector('#modal-root');
-    if (!modalRoot) return <></>
-    return ReactDOM.createPortal(
-        <Background>
-            <ModalContainer>
-                <Title>
-                    Title
-                </Title>
-                <Body>
-                    Body
-                </Body>
-            </ModalContainer>
-        </Background>, modalRoot
-    )
+  const modalRoot = document.querySelector('#modal-root');
+  if (!modalRoot) return null;
+  return ReactDOM.createPortal(
+  <Background>
+    <ModalContainer>
+      <Title>
+        Title
+      </Title>
+      <Body>
+        Body
+      </Body>
+    </ModalContainer>
+  </Background>, modalRoot);
 }
 
 const Background = styled.div`
