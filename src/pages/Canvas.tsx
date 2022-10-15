@@ -2,23 +2,17 @@ import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
 import swal from 'sweetalert2';
-import MAIN_CAR from './images/main-car-above.png';
-import CAR_ONE from './images/car1-above.png';
-import CAR_TWO from './images/car2-above.png';
-import CAR_THREE from './images/car3-above.png';
-import CAR_FOUR from './images/car4-above.png';
-import CAR_FIVE from './images/car5-above.png';
-import CAR_SIX from './images/car6-above.png';
-import CARPET_LOGO from './images/carpet-logo.png';
+import { Link } from 'react-router-dom';
+import MAIN_CAR from '../images/main-car-above.png';
+import CAR_ONE from '../images/car1-above.png';
+import CAR_TWO from '../images/car2-above.png';
+import CAR_THREE from '../images/car3-above.png';
+import CAR_FOUR from '../images/car4-above.png';
+import CAR_FIVE from '../images/car5-above.png';
+import CAR_SIX from '../images/car6-above.png';
+import CARPET_LOGO from '../images/carpet-logo.png';
 import './canvas.css';
-import { requestBestScores, requestGenerateBestScore } from './apis/score';
-import Alert from './components/Alert';
-
-// const PortalModal = props => {
-//     const modalRoot = document.querySelector('#modal-root');
-//     if (!modalRoot) return;
-//     return ReactDOM.createPortal(<></>, modalRoot)
-// }
+import { requestGenerateBestScore } from '../apis/score';
 
 interface ItemPosition {
   x: number;
@@ -364,7 +358,6 @@ function Canvas() {
           setCreateCarTime(LEVEL_3_CAR_CREATE);
           setState('play');
         } else {
-          console.log('gggg');
           setState('stop');
           setCreateCarTime(LEVEL_1_CAR_CREATE);
         }
@@ -381,7 +374,6 @@ function Canvas() {
           setCreateCarTime(LEVEL_4_CAR_CREATE);
           setState('play');
         } else {
-          console.log('gggg');
           setState('stop');
           setCreateCarTime(LEVEL_1_CAR_CREATE);
         }
@@ -398,7 +390,6 @@ function Canvas() {
           setCreateCarTime(LEVEL_5_CAR_CREATE);
           setState('play');
         } else {
-          console.log('gggg');
           setState('stop');
           setCreateCarTime(LEVEL_1_CAR_CREATE);
         }
@@ -457,14 +448,19 @@ function Canvas() {
 
       <div style={{ margin: '10px auto', textAlign: 'center' }}>
         <button type="button" onClick={() => setState('pause')}>
-          PAUSE
+          일시정지
         </button>
         <button type="button" onClick={() => setState('play')}>
-          PLAY
+          시작
         </button>
         <button type="button" onClick={() => setState('stop')}>
-          STOP
+          중지
         </button>
+        <Link to="/ranking">
+          <button type="button">
+            순위
+          </button>
+        </Link>
         <p>
           이름:
           {name}

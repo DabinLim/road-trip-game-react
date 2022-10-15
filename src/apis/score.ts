@@ -1,15 +1,21 @@
 import {
-  collection, getDocs, limit, orderBy, query, setDoc, doc, Timestamp,
+  collection, getDocs, limit, orderBy, query, Timestamp, addDoc,
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
+
+export interface BestScore {
+  name: string;
+  score: number;
+  createdAt: Timestamp;
+}
 
 export const requestBestScores = async () => {
   try {
     const docRef = collection(db, 'bestScore');
-    const q = query(docRef, orderBy('score', 'asc'), limit(30));
-    const docSnap = await getDocs(docRef);
+    const q = query(docRef, orderBy('score', 'desc'), limit(100));
+    const docSnap = await getDocs(q);
 
-    return docSnap.docs.map((dataList) => dataList.data());
+    return docSnap.docs.map((data) => data.data()) as BestScore[];
   } catch (e) {
     return [];
   }
@@ -19,14 +25,13 @@ export const requestGenerateBestScore = async (
   { name, score }: { name: string, score: number },
 ) => {
   try {
-    await setDoc(doc(db, 'bestScore', `${name}의 최고 점수`), {
+    await addDoc(collection(db, 'bestScore'), {
       name,
       score,
       createdAt: Timestamp.fromDate(new Date()),
     });
     return '뭐가 잘 됐음';
   } catch (e) {
-    console.error(e);
     return '뭐가 잘 안됐음';
   }
 };

@@ -1,9 +1,9 @@
 import React, { createContext } from 'react';
-import Canvas from './Canvas';
+import Routes from './Routes';
 
 export default function App() {
   const modalDispatch = createContext(null);
   return (
-    <Canvas />
+    <Routes />
   );
 }
