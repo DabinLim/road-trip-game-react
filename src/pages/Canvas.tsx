@@ -42,14 +42,17 @@ interface PositionRef {
   mainCar: ItemPosition;
 }
 
+const initialName = window.localStorage.getItem('name');
+const initialScore = window.localStorage.getItem('bestScore');
+
 function Canvas() {
-  const [name, setName] = useState('');
+  const [name, setName] = useState(initialName || '');
 
   const [state, setState] = useState<'play' | 'pause' | 'stop'>('stop');
   const [score, setScore] = useState(0);
   const [time, setTime] = useState(0);
   const [createCarTime, setCreateCarTime] = useState(LEVEL_1_CAR_CREATE);
-  const [bestScore, setBestScore] = useState(0);
+  const [bestScore, setBestScore] = useState(initialScore ? parseInt(initialScore, 10) : 0);
 
   const ref = useRef<HTMLCanvasElement>(null);
   const mainCarRef = useRef<HTMLImageElement>(null);
@@ -399,6 +402,7 @@ function Canvas() {
 
   useEffect(() => {
     if (bestScore > 0) {
+      window.localStorage.setItem('bestScore', bestScore.toString());
       requestGenerateBestScore({
         name,
         score: bestScore,
@@ -407,21 +411,24 @@ function Canvas() {
   }, [bestScore]);
 
   useEffect(() => {
-    swal.fire({
-      title: '더카펫 휴가 대작전',
-      html: '더카펫 프로젝트를 마친 슬로그업 직원들은<br>즐거운 휴가를 떠나려고 합니다.<br>무사히 휴가를 갈 수 있도록 운전을 도와주세요.<br><br><span style="font-weight: 700">운전자의 이름을 입력해 주세요.</span>',
-      confirmButtonText: '휴가가기',
-      input: 'text',
-      preConfirm(inputValue) {
-        if (!inputValue) {
-          swal.showValidationMessage('이름을 입력하세요.');
-          return;
-        }
-        setName(inputValue);
-      },
-      allowOutsideClick: false,
-    }).then(() => setState('play'));
-  }, []);
+    if (!name) {
+      swal.fire({
+        title: '더카펫 휴가 대작전',
+        html: '더카펫 프로젝트를 마친 슬로그업 직원들은<br>즐거운 휴가를 떠나려고 합니다.<br>무사히 휴가를 갈 수 있도록 운전을 도와주세요.<br><br><span style="font-weight: 700">운전자의 이름을 입력해 주세요.</span>',
+        confirmButtonText: '휴가가기',
+        input: 'text',
+        preConfirm(inputValue) {
+          if (!inputValue) {
+            swal.showValidationMessage('이름을 입력하세요.');
+            return;
+          }
+          setName(inputValue);
+          window.localStorage.setItem('name', inputValue);
+        },
+        allowOutsideClick: false,
+      }).then(() => setState('play'));
+    }
+  }, [name]);
 
   const getLevel = () => {
     switch (createCarTime) {
