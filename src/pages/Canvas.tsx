@@ -157,6 +157,11 @@ function Canvas() {
         setCreateCarTime(LEVEL_1_CAR_CREATE);
         setBestScore((n) => {
           if (n < score) {
+            window.localStorage.setItem('bestScore', score.toString());
+            requestGenerateBestScore({
+              name,
+              score,
+            });
             return score;
           }
           return n;
@@ -399,16 +404,6 @@ function Canvas() {
       });
     }
   }, [score]);
-
-  useEffect(() => {
-    if (bestScore > 0) {
-      window.localStorage.setItem('bestScore', bestScore.toString());
-      requestGenerateBestScore({
-        name,
-        score: bestScore,
-      });
-    }
-  }, [bestScore]);
 
   useEffect(() => {
     if (!name) {
