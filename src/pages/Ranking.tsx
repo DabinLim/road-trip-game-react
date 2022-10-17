@@ -40,7 +40,7 @@ export default function Ranking() {
                     <TableBodyItem>{index + 1}</TableBodyItem>
                     <TableBodyItem>{v.name}</TableBodyItem>
                     <TableBodyItem>{v.score}</TableBodyItem>
-                    <TableBodyItem>{dayjs(v.createdAt.toDate()).format('YY년 MM월 DD일 hh시 mm분 ss초')}</TableBodyItem>
+                    <TableBodyItem>{dayjs(v.createdAt.toDate()).format('YY년 MM월 DD일')}</TableBodyItem>
                 </tr>
             ))}
                 </tbody>
