@@ -192,6 +192,28 @@ function Canvas() {
     setScore(0);
   }, []);
 
+  const getLevel = () => {
+    switch (createCarTime) {
+      case LEVEL_1_CAR_CREATE:
+        return 'level 1';
+      case LEVEL_2_CAR_CREATE:
+        return 'level 2';
+      case LEVEL_3_CAR_CREATE:
+        return 'level 3';
+      case LEVEL_4_CAR_CREATE:
+        return 'level 4';
+      case LEVEL_5_CAR_CREATE:
+        return 'level 5';
+      default:
+        return 'level 0';
+    }
+  };
+
+  // TODO: sweetalert의 버그로 예상됨 커스텀 알럿 제작 필요
+  const didClose = () => {
+    window.scrollTo({ top: 1000 });
+  };
+
   useEffect(() => {
     loadImage(MAIN_CAR).then((img) => {
       (mainCarRef as any).current = img;
@@ -337,8 +359,10 @@ function Canvas() {
   }, [createCarTime]);
 
   useEffect(() => {
-    createCar();
-  }, [time, createCar]);
+    if (state === 'play') {
+      createCar();
+    }
+  }, [time, createCar, state]);
 
   useEffect(() => {
     if (score === 3000) {
@@ -347,6 +371,7 @@ function Canvas() {
         title: '휴가 성공!',
         text: '휴가지에 도착했어요!\n조금 더 달려볼까요?',
         confirmButtonText: '레벨 2로 올리기',
+        didClose,
       }).then((result) => {
         if (result.isConfirmed) {
           setCreateCarTime(LEVEL_2_CAR_CREATE);
@@ -364,6 +389,7 @@ function Canvas() {
         title: '휴가 성공!',
         text: '휴가지에 도착했어요!\n조금 더 달려볼까요?',
         confirmButtonText: '레벨 3로 올리기',
+        didClose,
       }).then((result) => {
         if (result.isConfirmed) {
           setCreateCarTime(LEVEL_3_CAR_CREATE);
@@ -381,6 +407,7 @@ function Canvas() {
         title: '휴가 성공!',
         text: '휴가지에 도착했어요!\n조금 더 달려볼까요?',
         confirmButtonText: '레벨 4로 올리기',
+        didClose,
       }).then((result) => {
         if (result.isConfirmed) {
           setCreateCarTime(LEVEL_4_CAR_CREATE);
@@ -398,6 +425,7 @@ function Canvas() {
         title: '휴가 성공!',
         text: '휴가지에 도착했어요!\n조금 더 달려볼까요?',
         confirmButtonText: '레벨 5로 올리기',
+        didClose,
       }).then((result) => {
         if (result.isConfirmed) {
           setCreateCarTime(LEVEL_5_CAR_CREATE);
@@ -418,6 +446,7 @@ function Canvas() {
         html: '더카펫 프로젝트를 마친 슬로그업 직원들은<br>즐거운 휴가를 떠나려고 합니다.<br>무사히 휴가를 갈 수 있도록 운전을 도와주세요.<br><br><span style="font-weight: 700">운전자의 이름을 입력해 주세요.</span>',
         confirmButtonText: '휴가가기',
         input: 'text',
+        didClose,
         preConfirm(inputValue) {
           if (!inputValue) {
             swal.showValidationMessage('이름을 입력하세요.');
@@ -431,22 +460,11 @@ function Canvas() {
     }
   }, [name]);
 
-  const getLevel = () => {
-    switch (createCarTime) {
-      case LEVEL_1_CAR_CREATE:
-        return 'level 1';
-      case LEVEL_2_CAR_CREATE:
-        return 'level 2';
-      case LEVEL_3_CAR_CREATE:
-        return 'level 3';
-      case LEVEL_4_CAR_CREATE:
-        return 'level 4';
-      case LEVEL_5_CAR_CREATE:
-        return 'level 5';
-      default:
-        return 'level 0';
+  useEffect(() => {
+    if (state === 'play') {
+      window.scrollTo({ top: 1000 });
     }
-  };
+  }, [state]);
 
   return (
     <div>
