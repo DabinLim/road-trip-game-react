@@ -42,10 +42,9 @@ interface PositionRef {
   mainCar: ItemPosition;
 }
 
-const initialName = window.localStorage.getItem('name');
-const initialScore = window.localStorage.getItem('bestScore');
-
 function Canvas() {
+  const initialName = window.localStorage.getItem('name');
+  const initialScore = window.localStorage.getItem('bestScore');
   const [name, setName] = useState(initialName || '');
 
   const [state, setState] = useState<'play' | 'pause' | 'stop'>('stop');
@@ -143,6 +142,10 @@ function Canvas() {
     positionRef.current.cars.splice(index, 1);
     positionRef.current.carAccel.splice(index, 1);
     setScore((n) => n + CAR_SCORE);
+  }, []);
+  const deleteAllCar = useCallback(() => {
+    positionRef.current.cars = [];
+    positionRef.current.carAccel = [];
   }, []);
   const crashCar = useCallback(
     (carPosition: ItemPosition, index: number) => {
@@ -347,9 +350,9 @@ function Canvas() {
       }).then((result) => {
         if (result.isConfirmed) {
           setCreateCarTime(LEVEL_2_CAR_CREATE);
+          deleteAllCar();
           setState('play');
         } else {
-          console.log('gggg');
           setState('stop');
           setCreateCarTime(LEVEL_1_CAR_CREATE);
         }
@@ -364,6 +367,7 @@ function Canvas() {
       }).then((result) => {
         if (result.isConfirmed) {
           setCreateCarTime(LEVEL_3_CAR_CREATE);
+          deleteAllCar();
           setState('play');
         } else {
           setState('stop');
@@ -380,6 +384,7 @@ function Canvas() {
       }).then((result) => {
         if (result.isConfirmed) {
           setCreateCarTime(LEVEL_4_CAR_CREATE);
+          deleteAllCar();
           setState('play');
         } else {
           setState('stop');
@@ -396,6 +401,7 @@ function Canvas() {
       }).then((result) => {
         if (result.isConfirmed) {
           setCreateCarTime(LEVEL_5_CAR_CREATE);
+          deleteAllCar();
           setState('play');
         } else {
           setState('stop');
